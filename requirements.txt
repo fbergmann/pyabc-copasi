@@ -1,0 +1,3 @@
+python-copasi
+pyabc
+-e git://github.com/copasi/basico.git
