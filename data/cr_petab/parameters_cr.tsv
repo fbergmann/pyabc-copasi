@@ -1,0 +1,4 @@
+parameterId	parameterScale	lowerBound	upperBound	estimate	parameterName	nominalValue
+theta1	lin	0.05	0.12	1.0	$\theta_1$	0.08
+theta2	lin	0.05	0.2	0.0	$\theta_2$	0.12
+sigma	log10	0.002	1.0	1.0	$\sigma$	0.02

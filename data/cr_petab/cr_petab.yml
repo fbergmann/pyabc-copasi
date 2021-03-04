@@ -1,0 +1,11 @@
+format_version: 1
+parameter_file: parameters_cr.tsv
+problems:
+- condition_files:
+  - experimental_conditions_cr.tsv
+  measurement_files:
+  - cr_measurement_table.tsv
+  observable_files:
+  - observables_cr.tsv
+  sbml_files:
+  - cr.xml
