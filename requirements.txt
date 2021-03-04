@@ -1,3 +1,4 @@
 python-copasi
 pyabc
 -e git://github.com/copasi/basico.git#egg=basico
+-e git://github.com/copasi/python-petab-importer.git#egg=python-petab-importer
