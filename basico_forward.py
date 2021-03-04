@@ -24,6 +24,7 @@ class BasicoModel:
         self.max_t = max_t
 
         # allow to override parameters
+        self.changes = changes
         if changes is not None: 
             self.apply_parameters(changes)
 
@@ -52,10 +53,22 @@ class BasicoModel:
             else:
                 basico.set_parameters(key, initial_value=par[key], model=self.dm)
 
+    def __getstate__(self): 
+        state = {
+            'sbml_file': self.sbml_file, 
+            'max_t': self.max_t, 
+            'output': self.output,
+            'changes': self.changes
+        }
+        return state
+
+    def __setstate__(self, state):
+        self.__init__(state['sbml_file'], max_t =state['max_t'], output=state['output'], changes=state['changes'])
+
 
 if __name__ == '__main__':
     print(f'Using COPASI: {COPASI.__version__}')
-    print(f'Using pyabc: {pyabc.__version__}')
+    print(f'Using pyabc:  {pyabc.__version__}')
     print(f'Using basico: {basico.__version__}')
 
     model = BasicoModel('./data/brusselator-model.xml')
