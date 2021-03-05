@@ -5,7 +5,7 @@ import basico
 class BasicoModel:
     __name__ = "BasicoModel"
 
-    def __init__(self, sbml_file, max_t=10, output=None, changes=None) -> None:
+    def __init__(self, sbml_file, max_t=10, output=None, changes=None, use_numbers=False, change_unit=True) -> None:
         """
         """
         self.sbml_file = sbml_file
@@ -19,7 +19,8 @@ class BasicoModel:
         # many sbml models do not define realistic units, and 
         # since we compute in particle numbers, we usually do not run
         # for gazillion particles, so set substance unit to 1
-        basico.set_model_unit(substance_unit='1', model=self.dm)
+        if change_unit:
+            basico.set_model_unit(substance_unit='1', model=self.dm)
         
         self.max_t = max_t
 
@@ -28,13 +29,15 @@ class BasicoModel:
         if changes is not None: 
             self.apply_parameters(changes)
 
+        self.use_numbers = False
+
     def __call__(self, par):
         """Calls the time course and returns the selected result. 
 
         sets the method to gibson bruck, automatic step size
         """
         self.apply_parameters(par)
-        tc = basico.run_time_course(self.max_t, model=self.dm, method='stochastic', automatic=True, use_seed=False).reset_index()
+        tc = basico.run_time_course(self.max_t, model=self.dm, method='stochastic', automatic=True, use_seed=False, use_numbers=self.use_numbers).reset_index()
         return {
             "t": tc.Time.to_numpy(), 
             "X": tc[self.output].to_numpy()
