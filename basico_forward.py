@@ -5,7 +5,7 @@ import basico
 class BasicoModel:
     __name__ = "BasicoModel"
 
-    def __init__(self, sbml_file, max_t=10, output=None, changes=None, use_numbers=False, change_unit=True) -> None:
+    def __init__(self, sbml_file, max_t=10, output=None, changes=None, use_numbers=False, change_unit=True, method='stochastic') -> None:
         """
         """
         self.sbml_file = sbml_file
@@ -30,6 +30,7 @@ class BasicoModel:
             self.apply_parameters(changes)
 
         self.use_numbers = False
+        self.method = method
 
     def __call__(self, par):
         """Calls the time course and returns the selected result. 
@@ -37,7 +38,7 @@ class BasicoModel:
         sets the method to gibson bruck, automatic step size
         """
         self.apply_parameters(par)
-        tc = basico.run_time_course(self.max_t, model=self.dm, method='stochastic', automatic=True, use_seed=False, use_numbers=self.use_numbers).reset_index()
+        tc = basico.run_time_course(self.max_t, model=self.dm, method=self.method, automatic=True, use_seed=False, use_numbers=self.use_numbers).reset_index()
         return {
             "t": tc.Time.to_numpy(), 
             "X": tc[self.output].to_numpy()
@@ -61,12 +62,14 @@ class BasicoModel:
             'sbml_file': self.sbml_file, 
             'max_t': self.max_t, 
             'output': self.output,
-            'changes': self.changes
+            'changes': self.changes,
+            'method': self.method, 
+            'use_numbers': self.use_numbers
         }
         return state
 
     def __setstate__(self, state):
-        self.__init__(state['sbml_file'], max_t =state['max_t'], output=state['output'], changes=state['changes'])
+        self.__init__(state['sbml_file'], max_t =state['max_t'], output=state['output'], changes=state['changes'], use_numbers=state['use_numbers'], method=state['method'])
 
 
 if __name__ == '__main__':
